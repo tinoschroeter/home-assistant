@@ -1,0 +1,5 @@
+namespace: home-assistant 
+resources:
+  - pvc.yaml
+  - service.yaml
+  - assistant.yaml

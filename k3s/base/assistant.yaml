@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: assistant-app
+  name: assistant-app
+  namespace: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: assistant-app
+  template:
+    metadata:
+      labels:
+        app: assistant-app
+    spec:
+      containers:
+      - name: assistant-app
+        image: ghcr.io/home-assistant/home-assistant:2022.5.4
+        resources:
+          requests:
+            memory: "80Mi"
+            cpu: "200m"
+          limits:
+            memory: "424Mi"
+            cpu: "700m"
+        volumeMounts:
+        - name: volv
+          mountPath: /config
+        ports:
+        - containerPort: 8123
+      volumes:
+      - name: volv
+        persistentVolumeClaim:
+          claimName: assistant-pvc
