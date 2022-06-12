@@ -3,3 +3,4 @@ resources:
   - pvc.yaml
   - service.yaml
   - assistant.yaml
+  - mqtt.yaml

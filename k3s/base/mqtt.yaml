@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: assistant-app
-  name: assistant-app
-  namespace: home-assistant
+    app: mqtt-app
+  name: mqtt-app
+  namespace: home-assistent
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: assistant-app
+      app: mqtt-app
   template:
     metadata:
       labels:
-        app: assistant-app
+        app: mqtt-app
     spec:
       containers:
-      - name: assistant-app
-        image: ghcr.io/home-assistant/home-assistant:2022.6.5
+      - name: mqtt-app
+        image: eclipse-mosquitto:2.0.14
         resources:
           requests:
             memory: "80Mi"
@@ -27,21 +27,20 @@ spec:
             cpu: "700m"
         volumeMounts:
         - name: volv
-          mountPath: /config
+          mountPath: /mosquitto
         ports:
-        - containerPort: 8123
+        - containerPort: 1883
         readinessProbe:
           tcpSocket:
-            port: 8123
+            port: 1883
           initialDelaySeconds: 5
           periodSeconds: 10
         livenessProbe:
           tcpSocket:
-            port: 8123
+            port: 1883
          initialDelaySeconds: 15
          periodSeconds: 20
-
       volumes:
       - name: volv
         persistentVolumeClaim:
-          claimName: assistant-pvc
+          claimName: mqtt-pvc
