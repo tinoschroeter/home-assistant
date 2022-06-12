@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: home-ingress
+  namespace: home-assistant-dev
+spec:
+  rules:
+  - host: dev.home.tino.sh
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: assistant-service
+            port:
+              number: 8123
+
+  tls:
+  - hosts:
+    - dev.home.tino.sh
+    secretName: dev-home-tino-sh-tls
